@@ -20,6 +20,7 @@ public class cs3421_emul {
         data_memory mem = new data_memory();
         inst_memory inst = new inst_memory();
         cache cache = new cache();
+        iodev io = new iodev();
 
         int[] mem_storage = new int[0];
         int[] cpu_storage = new int[9];
@@ -155,6 +156,16 @@ public class cs3421_emul {
                                 cache.on();
                             } else if (command.compareTo("dump") == 0) {
                                 cache.dump();
+                            }
+                        } else if (component.compareTo("iodev") == 0) {
+                            String command = scan.next();
+                            if(command.compareTo("reset") == 0) {
+                                io.reset();
+                            } else if(command.compareTo("dump") == 0) {
+                                io.dump();
+                            } else if(command.compareTo("load") == 0) {
+                                File inFile = new File(scan.next());
+                                io.load(inFile);
                             }
                         }
                     } else System.exit(0);  //no more instructions
