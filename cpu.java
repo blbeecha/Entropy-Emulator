@@ -11,6 +11,7 @@
 public class cpu {
     private int tc;
     cache cache = new cache();
+    iodev io = new iodev();
 
     public cpu() {
         exec = false;
@@ -349,9 +350,19 @@ public class cpu {
         boolean halt_called = false;
         String instruction;
         int cacheCheck;
+        boolean io_call = false;
 
         /** Instruction (clock tick) loop **/
         for (int k = 0; k < increment; k++) {
+
+            //io device check
+            if( io.getTick(k) && io.isLoaded() ) {          //if io is loaded and on the correct clock tick
+                mem_storage = io.getop(k, mem_storage);         //perform write/read
+                io_call = true;
+                //tc+=5;
+                //k+=4;
+            }
+
             instruction = getNextInstr(cpu_storage, inst_storage);
 
             if (instruction.substring(0, 2).matches("lw") ) {
